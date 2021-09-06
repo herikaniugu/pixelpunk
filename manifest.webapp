@@ -1,0 +1,39 @@
+{
+  "name": "Pixelpunk",
+  "version": "2.1.0",
+  "description": "2D Platformer Game with Action, Adventure and Puzzle elements. Explore and Travel to The End of The Virtual World while Shooting Enemies and Avoiding Traps. Do not touch the Red Platforms and Yellow Materials. Press 4 or 6 to Move, Press 2 to Jump and Press 5 to Shoot.",
+  "launch_path": "/index.html",
+  "type": "web",
+  "origin": "app://Pixelpunk",
+  "fullscreen": "true",
+  "orientation": [
+    "portrait"
+  ],
+  "categories": [
+    "games"
+  ],
+  "icons": {
+    "56": "/Icon/A56x56.png",
+    "112": "/Icon/A112x112.png"
+  },
+  "dependencies": {
+		"ads-sdk": "1.4.1"
+	},
+  "developer": {
+    "name": "Heri Kaniugu",
+    "url": "http://github.com/herikaniugu"
+  },
+  "permissions": {
+    "mobiledata": {},
+    "wifidata": {}
+  },
+  "locales": {
+    "en-US": {
+      "name": "Pixelpunk",
+      "subtitle": "Travel, Avoid the Traps and Shoot the Enemies.",
+      "description": "2D Platformer Game with Action, Adventure and Puzzle elements. Explore and Travel to The End of The Virtual World while Shooting Enemies and Avoiding Traps. Do not touch the Red Platforms and Yellow Materials. Press 4 or 6 to Move, Press 2 to Jump and Press 5 to Shoot."
+    }
+  },
+  "default_locale": "en-US",
+  "theme_color": "#888888"
+}

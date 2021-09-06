@@ -1,0 +1,458 @@
+@ MAIN
+get:App:source:main:(():{
+    set:draw:(get:App:draw)
+	set:width:(480)
+	set:height:(640)
+    get:this:create:(():{
+		@ CREATE
+		get:draw:width:(40 * 80)
+		get:draw:height:(40 * 20)
+		get:draw:scale(get:width, get:height)
+		do:foreach(get:draw:input:key:each):((key):{
+			get:draw:input:key:clear(get:key:id)
+		})
+		do:foreach(get:draw:input:pad:each):((pad):{
+			get:draw:input:pad:clear(get:pad:id)
+		})
+		do:foreach(get:draw:input:touch:each):((touch):{
+			get:draw:input:touch:clear(get:touch:id)
+		})
+		get:draw:initialize:(true)
+		get:draw:playable:(false)
+        @ BACKGROUND
+		get:draw:item:background:(new:Object())
+		get:draw:item:background:color:(get:Color:value(0x555555))
+		get:draw:item:background:render:(():{
+			get:draw:fill(get:this:color):rectangle(0, 0, get:draw:width, get:draw:height)
+		})
+		@ PLAYER
+		get:draw:item:player:(get:draw:platformer())
+		get:draw:item:player:x:(40 * 8)
+		get:draw:item:player:y:(40 * 6)
+		get:draw:item:player:width:(40)
+		get:draw:item:player:height:(40)
+		@ ATTACK
+		get:draw:item:attack:(new:Array())
+		@ ENEMY
+		get:draw:item:enemy:(new:Array())
+		@ ENVIRONMENT
+		get:draw:item:environment:(get:draw:colorset())
+		get:draw:item:environment:x:(0)
+		get:draw:item:environment:y:(0)
+		get:draw:item:environment:id:(get:draw:value:game)
+		get:draw:item:environment:size:({ width: 40, height: 40 })
+		get:draw:item:environment:source(get:draw:value:environment)
+		get:draw:item:environment:update()
+		do:foreach(get:draw:item:environment:each):((value):{
+			do:case(get:value:id == 6):{
+				set:item:(new:Object())
+				get:item:x:(get:value:x)
+				get:item:y:(get:value:y + get:value:height - 40)
+				get:item:width:(40)
+				get:item:height:(40)
+				get:item:energy:(100)
+				get:item:speed:(4)
+				get:item:color:(get:Color:BRICK)
+				get:item:move:(():{
+					get:this:x:(get:this:x + get:this:speed)
+				})
+				get:item:render:(():{
+					get:draw:fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height)
+				})
+				get:draw:item:enemy:push(get:item)
+			}
+			do:case(get:value:id == 9):{
+				get:draw:item:player:x:(get:value:x)
+				get:draw:item:player:y:(get:value:y)
+			}
+		})
+		@ MENU
+		get:draw:button:menu:(new:Object())
+		get:draw:button:menu:width:(40)
+		get:draw:button:menu:height:(40)
+		get:draw:button:menu:opacity:(0.6)
+		get:draw:button:menu:color:(get:Color:WHITE)
+		get:draw:button:menu:render:(():{
+			get:draw:save():opacity(get:this:opacity):fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height):restore()
+		})
+		@ LEFT
+		get:draw:button:left:(new:Object())
+		get:draw:button:left:width:(40)
+		get:draw:button:left:height:(40)
+		get:draw:button:left:opacity:(0.6)
+		get:draw:button:left:color:(get:Color:WHITE)
+		get:draw:button:left:render:(():{
+			get:draw:save():opacity(get:this:opacity):fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height):restore()
+		})
+		@ RIGHT
+		get:draw:button:right:(new:Object())
+		get:draw:button:right:width:(40)
+		get:draw:button:right:height:(40)
+		get:draw:button:right:opacity:(0.6)
+		get:draw:button:right:color:(get:Color:WHITE)
+		get:draw:button:right:render:(():{
+			get:draw:save():opacity(get:this:opacity):fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height):restore()
+		})
+		@ ATTACK
+		get:draw:button:attack:(new:Object())
+		get:draw:button:attack:width:(40)
+		get:draw:button:attack:height:(40)
+		get:draw:button:attack:opacity:(0.6)
+		get:draw:button:attack:color:(get:Color:WHITE)
+		get:draw:button:attack:render:(():{
+			get:draw:save():opacity(get:this:opacity):fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height):restore()
+		})
+		@ LEAP
+		get:draw:button:leap:(new:Object())
+		get:draw:button:leap:width:(40)
+		get:draw:button:leap:height:(40)
+		get:draw:button:leap:opacity:(0.6)
+		get:draw:button:leap:color:(get:Color:WHITE)
+		get:draw:button:leap:render:(():{
+			get:draw:save():opacity(get:this:opacity):fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height):restore()
+		})
+		@ STOPWATCH
+		get:draw:item:stopwatch:(get:draw:print())
+		get:draw:item:stopwatch:size:(6)
+		get:draw:item:stopwatch:count:(0)
+		get:draw:item:stopwatch:opacity:(0.6)
+		get:draw:item:stopwatch:color:(get:Color:WHITE)
+		get:draw:item:stopwatch:value:("00")
+		get:draw:item:stopwatch:update()
+		@ GAME
+		get:draw:item:game:(get:draw:print())
+		get:draw:item:game:size:(6)
+		get:draw:item:game:opacity:(0.6)
+		get:draw:item:game:color:(get:Color:WHITE)
+		do:case(get:draw:value:game < 9):{
+			set:id:(get:draw:value:game + 1)
+			get:draw:item:game:value:("0" + get:id)
+		}:default:{
+			set:id:(get:draw:value:game + 1)
+			get:draw:item:game:value:(get:Type:BLANK + get:id)
+		}
+		get:draw:item:game:update()
+		@ INFORMATION
+		get:draw:item:information:(new:Object())
+		get:draw:item:information:text:(get:draw:print())
+		get:draw:item:information:text:size:(6)
+		get:draw:item:information:text:color:(get:Color:WHITE)
+		get:draw:item:information:background:(get:Color:WHITE)
+		get:draw:item:information:type:({ timeout: false, gameover: false, complete: false })
+		get:draw:item:information:opacity:(1)
+		get:draw:item:information:render:(():{
+			get:draw:save():opacity(get:this:opacity):fill(get:this:background):rectangle(0, 0, get:draw:width, get:draw:height):restore()
+		})
+		@ AD
+		get:draw:ad:count:(get:draw:ad:count + 1)
+		get:draw:ad:close:(():{
+			get:draw:ad:preload()
+			get:draw:value:cursor:(0)
+			get:draw:open(get:App:source:menu)
+		})
+    })
+	get:this:input:(():{
+		@ INPUT
+		get:draw:input:menu:(false)
+		get:draw:input:attack:(false)
+		get:draw:input:left:(false)
+		get:draw:input:right:(false)
+		get:draw:input:leap:(false)
+		@ PLAYABLE
+		do:case(get:draw:playable):{
+			@ KEY
+			do:foreach(get:draw:input:key:each):((key):{
+				do:case(get:key:active):{
+					do:case(get:key:id == 27 || get:key:id == 8):{
+						get:draw:input:menu:(true)
+					}
+					do:case(get:key:id == 13 || get:key:id == 53):{
+						get:draw:input:attack:(true)
+					}
+					do:case(get:key:id == 37 || get:key:id == 52):{
+						get:draw:input:left:(true)
+					}
+					do:case(get:key:id == 39 || get:key:id == 54):{
+						get:draw:input:right:(true)
+					}
+					do:case(get:key:id == 38 || get:key:id == 50):{
+						get:draw:input:leap:(true)
+					}
+					get:draw:touchable:(false)
+				}
+			})
+			@ PAD
+			do:foreach(get:draw:input:pad:each):((pad):{
+				do:case(get:pad:active):{
+					do:foreach(get:pad:axe):((axe):{
+						do:case(get:axe:active):{
+							do:case(get:axe:id == 2 || get:axe:id == 10):{
+								get:draw:input:left:(true)
+							}
+							do:case(get:axe:id == 0 || get:axe:id == 8):{
+								get:draw:input:right:(true)
+							}
+							get:draw:touchable:(false)
+						}
+					})
+					do:foreach(get:pad:button):((button):{
+						do:case(get:button:active):{
+							do:case(get:button:id == 1):{
+								get:draw:input:attack:(true)
+							}
+							do:case(get:button:id == 2):{
+								get:draw:input:leap:(true)
+							}
+							do:case(get:button:id == 9):{
+								get:draw:input:menu:(true)
+								get:button:active:(false)
+							}
+							get:draw:touchable:(false)
+						}
+					})
+				}
+			})
+			@ TOUCH
+			do:foreach(get:draw:input:touch:each):((touch):{
+				do:case(get:touch:active):{
+					do:case(get:draw:click(get:touch, get:draw:button:menu)):{ get:draw:input:menu:(true) }
+					do:case(get:draw:click(get:touch, get:draw:button:left)):{ get:draw:input:left:(true) }
+					do:case(get:draw:click(get:touch, get:draw:button:right)):{ get:draw:input:right:(true) }
+					do:case(get:draw:click(get:touch, get:draw:button:attack)):{ get:draw:input:attack:(true) }
+					do:case(get:draw:click(get:touch, get:draw:button:leap)):{ get:draw:input:leap:(true) }
+					get:draw:touchable:(true)
+				}
+			})
+			@ ATTACK
+			do:case(get:draw:input:attack):{
+				do:case(get:draw:wait(10)):{
+					set:attack:(new:Object())
+					get:attack:x:(get:draw:item:player:x + get:draw:item:player:width)
+					get:attack:y:(get:draw:item:player:y)
+					get:attack:width:(20)
+					get:attack:height:(20)
+					get:attack:color:(get:Color:WHITE)
+					get:attack:move:(():{
+						get:this:x:(get:this:x + 20)
+					})
+					get:attack:render:(():{
+						get:draw:fill(get:this:color):rectangle(get:this:x, get:this:y, get:this:width, get:this:height)
+					})
+					get:draw:item:attack:push(get:attack)
+				}
+			}
+			@ MOVE
+			do:case(get:draw:input:leap):{
+				do:case(get:draw:item:player:leap == false):{
+					get:draw:item:player:velocity:y:(-18)
+					get:draw:item:player:leap:(true)
+				}
+			}
+			do:case(get:draw:input:right):{
+				get:draw:item:player:velocity:x:(get:draw:item:player:velocity:x + get:draw:interpolation)
+			}
+			do:case(get:draw:input:left):{
+				get:draw:item:player:velocity:x:(get:draw:item:player:velocity:x - get:draw:interpolation)
+			}
+		}
+		@ MENU
+		do:case(get:draw:input:menu):{
+			get:draw:open(get:App:source:menu)
+		}
+	})
+    get:this:update:(():{
+		@ INITIALIZE
+		do:case(get:draw:initialize && get:draw:playable == false):{
+			get:draw:item:information:background:(get:Color:WHITE)
+			get:draw:item:information:opacity:(get:draw:item:information:opacity - 0.04)
+			do:case(get:draw:item:information:opacity < 0.04):{
+				get:draw:initialize:(false)
+				get:draw:playable:(true)
+			}
+		}
+		@ CAMERA
+		get:draw:camera(get:draw:item:player)
+		@ ALIGNMENT
+		get:draw:top(get:draw:button:menu, 40)
+		get:draw:left(get:draw:button:menu, 40)
+		get:draw:bottom(get:draw:button:left, 40 * 2 + 20)
+		get:draw:left(get:draw:button:left, 40 + 20)
+		get:draw:bottom(get:draw:button:right, 40 * 2 + 20)
+		get:draw:left(get:draw:button:right, 40 * 3 + 20)
+		get:draw:bottom(get:draw:button:attack, 40 * 2 + 20)
+		get:draw:right(get:draw:button:attack, 40 * 4 + 20)
+		get:draw:bottom(get:draw:button:leap, 40 * 2 + 20)
+		get:draw:right(get:draw:button:leap, 40 * 2 + 20)
+		get:draw:top(get:draw:item:stopwatch, 40)
+		do:case(get:draw:touchable):{
+			get:draw:left(get:draw:item:stopwatch, 40 * 2 + 20)
+		}:default:{
+			get:draw:left(get:draw:item:stopwatch, 40)
+		}
+		get:draw:top(get:draw:item:game, 40)
+		get:draw:right(get:draw:item:game, get:draw:item:game:width + 40)
+		get:draw:center(get:draw:item:information:text)
+		@ STOPWATCH
+		do:case(get:draw:playable && get:draw:value:game < 15):{
+			get:draw:item:stopwatch:count:(get:Math:floor(get:draw:frame / 100))
+			do:case(get:draw:item:stopwatch:count < 10):{
+				get:draw:item:stopwatch:value:("0" + get:draw:item:stopwatch:count)
+			}:default:{
+				get:draw:item:stopwatch:value:(get:draw:item:stopwatch:count)
+			}
+			get:draw:item:stopwatch:update()
+		}
+		@ PLAYER
+		get:draw:item:player:update()
+		get:draw:item:player:grounded:(false)
+		@ ENVIRONMENT
+		do:foreach(get:draw:item:environment:each):((value):{
+			do:case(get:value:id == 1):{
+				set:direction:(get:draw:collision(get:draw:item:player, get:value))
+				do:case(get:direction == "left" || get:direction == "right"):{
+					get:draw:item:player:velocity:x:(0)
+				}:case(get:direction == "bottom"):{
+					get:draw:item:player:leap:(false)
+					get:draw:item:player:grounded:(true)
+				}
+				do:foreach(get:draw:item:attack):((attack, index, array):{
+					do:case(get:draw:intersection(get:attack, get:value)):{
+						get:array:splice(get:index, 1)
+					}
+				})
+			}:case(get:value:id == 3):{
+				do:case(get:draw:playable && get:draw:intersection(get:draw:item:player, get:value)):{
+					get:draw:item:information:type:gameover:(true)
+				}
+			}:case(get:value:id == 4):{
+				do:case(get:draw:playable && get:draw:intersection(get:draw:item:player, get:value)):{
+					get:draw:item:information:type:complete:(true)
+				}
+			}
+			do:case(get:value:id == 1 || get:value:id == 5):{
+				do:foreach(get:draw:item:enemy):((enemy):{
+					set:direction:(get:draw:collision(get:enemy, get:value))
+					do:case(get:direction == get:Align:LEFT || get:direction == get:Align:RIGHT):{
+						get:enemy:speed:(-get:enemy:speed)
+					}
+				})
+			}
+		})
+		@ ENEMY
+		do:foreach(get:draw:item:enemy):((value):{
+			get:value:move()
+			do:case(get:draw:intersection(get:value, get:draw:item:player)):{
+				get:draw:item:information:type:gameover:(true)
+			}
+		})
+		@ ATTACK
+		do:foreach(get:draw:item:attack):((value, index, array):{
+			get:value:move()
+			do:foreach(get:draw:item:enemy):((enemy, position, attack):{
+				do:case(get:draw:intersection(get:value, get:enemy)):{
+					get:enemy:energy:(get:enemy:energy - 10)
+					get:array:splice(get:index, 1)
+				}
+				do:case(get:enemy:energy < 0):{
+					get:attack:splice(get:position, 1)
+				}
+			})
+		})
+		@ GROUND
+		do:case(get:draw:item:player:grounded):{
+			get:draw:item:player:velocity:y:(0)
+		}
+		@ INFORMATION
+		do:case(get:draw:item:player:y > get:draw:height):{
+			get:draw:item:information:type:gameover:(true)
+		}
+		do:case(get:draw:item:stopwatch:count > 10 && get:draw:value:game < 15):{
+			get:draw:item:information:type:timeout:(true)
+		}
+		do:case(get:draw:item:information:type:timeout):{
+			get:draw:item:information:text:value:("TIMEOUT")
+		}
+		do:case(get:draw:item:information:type:gameover):{
+			get:draw:item:information:text:value:("GAMEOVER")
+		}
+		@ GAMEOVER
+		do:case(get:draw:item:information:type:timeout || get:draw:item:information:type:gameover):{
+			get:draw:frame:(0)
+			get:draw:playable:(false)
+			get:draw:item:player:color:(get:Color:BRICK)
+			get:draw:item:information:background:(get:Color:BRICK)
+			get:draw:item:information:text:update()
+			do:case(get:draw:item:information:opacity < 2):{
+				get:draw:item:information:opacity:(get:draw:item:information:opacity + 0.04)
+			}:default:{
+				get:draw:item:information:type:timeout:(false)
+				get:draw:item:information:type:gameover:(false)
+				do:case(get:draw:ad:count % 2 == 0):{
+					get:draw:ad:publish()
+					do:case(get:draw:ad:active == false):{ get:this:create() }
+				}:default:{
+					get:this:create()
+				}
+			}
+		}
+		@ COMPLETED
+		do:case(get:draw:item:information:type:complete && get:draw:item:information:type:timeout == false && get:draw:item:information:type:gameover == false):{
+			get:draw:frame:(0)
+			get:draw:playable:(false)
+			get:draw:item:information:background:(get:Color:WATER)
+			get:draw:item:information:text:value:("COMPLETED")
+			get:draw:item:information:text:update()
+			do:case(get:draw:item:information:opacity < 2):{
+				get:draw:item:information:opacity:(get:draw:item:information:opacity + 0.04)
+			}:default:{
+				get:draw:item:information:type:complete:(false)
+				get:draw:value:game:(get:draw:value:game + 1)
+				do:case(get:draw:value:game > get:Number(get:Cache:get("pixelpunk//game"))):{
+					get:Cache:set("pixelpunk//game", get:draw:value:game)
+				}
+				do:case(get:draw:ad:count % 2 == 0):{
+					get:draw:ad:publish()
+					do:case(get:draw:ad:active == false):{ get:this:create() }
+				}:default:{
+					get:this:create()
+				}
+			}
+		}
+		@ ADD
+		get:draw:each:(new:Array())
+		get:draw:each:push(get:draw:item:background)
+		get:draw:each:push(get:draw:item:environment)
+		get:draw:each:push(get:draw:item:player)
+		do:foreach(get:draw:item:attack):((value):{
+			get:draw:each:push(get:value)
+		})
+		do:foreach(get:draw:item:enemy):((value):{
+			get:draw:each:push(get:value)
+		})
+		do:case(get:draw:playable && get:draw:touchable):{
+			get:draw:each:push(get:draw:button:menu)
+			get:draw:each:push(get:draw:button:left)
+			get:draw:each:push(get:draw:button:right)
+			get:draw:each:push(get:draw:button:attack)
+			get:draw:each:push(get:draw:button:leap)
+		}
+		do:case(get:draw:playable && get:draw:value:game < 15):{
+			get:draw:each:push(get:draw:item:stopwatch)
+			get:draw:each:push(get:draw:item:game)
+		}
+		do:case(get:draw:playable == false):{
+			get:draw:each:push(get:draw:item:information)
+			get:draw:each:push(get:draw:item:information:text)
+		}
+    })
+    get:this:render:(():{
+		@ CLEAR
+		get:draw:clear()
+		@ RENDER
+		do:foreach(get:draw:each):((value):{
+			do:case(get:value && get:value:render):{
+				get:value:render()
+			}
+		})
+    })
+})
